@@ -15,11 +15,11 @@ public class Checkout_page {
 
 WebDriver driver;
     
-    @FindBy(xpath = "//div[@id='shopping_cart_container']")
-    WebElement carticon;
-    
-    @FindBy(id = "checkout")
-    WebElement checkout;
+@FindBy(xpath = "//a[@class='shopping_cart_link']")
+WebElement carticon;
+
+@FindBy(id = "checkout")
+WebElement checkout;
     
     public Checkout_page(WebDriver driver) {
         this.driver = driver;
@@ -27,22 +27,16 @@ WebDriver driver;
     
     }
     
- // Method to click the cart link directly and go to checkout page
     public void cartclick() {
-        try {
-            Thread.sleep(2000); // Wait for products to load
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebElement cart = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@class='shopping_cart_link']")));
+        cart.click();
 
-        // Directly click the cart link (<a> tag) to ensure page navigation works
-        WebElement cartLink = driver.findElement(By.xpath("//a[@class='shopping_cart_link']"));
-        cartLink.click();
-
-        // Wait until the checkout button is visible on the cart page and click it
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement checkoutBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout")));
+        WebElement checkoutBtn = wait.until(ExpectedConditions.elementToBeClickable(checkout));
         checkoutBtn.click();
+    
+    
+    
      }
         @FindBy(id = "first-name")
         WebElement firstname;

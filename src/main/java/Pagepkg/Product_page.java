@@ -13,17 +13,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Product_page {
 
     WebDriver driver;
-
+    
     // Locators using @FindBy
     @FindBy(xpath = "//div[@class='app_logo']")
     WebElement logo;
 
     @FindBy(xpath = "//button[text()='Add to cart']")
     List<WebElement> cartbutton;
-
-    @FindBy(xpath = "//div[@class='inventory_item_label']")
+    
+    @FindBy(xpath = "//div[@class='inventory_item_description']")
     List<WebElement> productdetails;
-
+   
+   
     @FindBy(xpath = "//select[@class='product_sort_container']")
     WebElement dropdown;
 
@@ -31,31 +32,33 @@ public class Product_page {
     public Product_page(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+       
     }
 
     // Method to verify logo
     public WebElement logoverify() {
         return logo;
-    }
-
- // Method to add items to cart
-    public void additems() throws InterruptedException {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        wait.until(ExpectedConditions.visibilityOfAllElements(cartbutton));
-     
-//        wait.until(ExpectedConditions.visibilityOfAllElements(cartbutton));
         
-        Thread.sleep(2000);
-        
-        for (WebElement items : cartbutton) {
-            System.out.println(items.getText());
-            items.click();
         }
+    // Method to add items to cart safely without StaleElementReferenceException
+    public void additems() throws InterruptedException {
+        
+        Thread.sleep(3000);
+        
+        int totalProducts = cartbutton.size();
+        System.out.println("Total Add to Cart Buttons: " + totalProducts);
+        
+        for (int i = 0; i < totalProducts; i++) {
+            WebElement item = cartbutton.get(0);
+            item.click();
+        }
+        System.out.println("Successfully added all products to the cart");
     }
-    // Method to select Z to A from dropdown 
     public void selectZtoA() {
-        Select sel = new Select(dropdown);
-        sel.selectByValue("za");  
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(dropdown));
+        Select sel = new Select(sortDropdown);
+        sel.selectByValue("za");
     }
 
     // Method to get product details list
@@ -63,3 +66,4 @@ public class Product_page {
         return productdetails;
     }
 }
+

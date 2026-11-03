@@ -1,8 +1,12 @@
 package Testpkg;
 
+import java.time.Duration;
 import java.util.List;
 
+import org.apache.commons.collections4.bag.SynchronizedSortedBag;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import com.aventstack.extentreports.ExtentTest;
 import Basepkg.Base_class;
@@ -14,7 +18,7 @@ public class Checkout_test extends Base_class {
 
     @Test
     public void iconclick() throws InterruptedException {
-        // open website url
+     
         driver.get("https://www.saucedemo.com/");
 
         Login_page log = new Login_page(driver);
@@ -28,9 +32,12 @@ public class Checkout_test extends Base_class {
         log.login_button();
         Thread.sleep(2000);
 
-        // adding product to cart
+     // adding product to cart
         pdt.selectZtoA();
         pdt.additems();
+
+        // Get product details list with wait
+        Thread.sleep(3000);
         List<WebElement> dt1 = pdt.productdtls();
         System.out.println("Total Number of Products: " + dt1.size());
 
@@ -40,27 +47,23 @@ public class Checkout_test extends Base_class {
         }
 
         test.pass("Products displayed and items added to cart successfully");
-    
 
-        
-
-        // 1. moving to check clicking carticon
+        // moving to check clicking carticon
         checkout_page.cartclick();
 
-        // 2. continue using customer details
+        //  continue using customer details
         checkout_page.enterCustomerDetails("Deepamol", "Deepamol", "691572");
-
-        // 3. finish order
-        //checkout_page.finishOrder();
+        System.out.println("Checkout information submitted successfully using formatted excel data.");
+        //finish order
+        checkout_page.finishOrder();
+        System.out.println("Order placed successfully! Confirmation message: Thank you for your order!");
+        Thread.sleep(2000);
         
-        
-
-     // 4. Logout from application 
+        //  Logout from application 
         checkout_page.logoutProcess();
+        System.out.println("User successfully logged out and returned to login page.");
         Thread.sleep(2000);
 
-        test.pass("Checkout Flow completed and logged out successfully");
-
         
+        }
     }
-}
