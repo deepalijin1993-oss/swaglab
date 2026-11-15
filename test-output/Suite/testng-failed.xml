@@ -3,6 +3,15 @@
 <suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Regression Test(failed)">
     <classes>
+      <class name="Testpkg.Login_test">
+        <methods>
+          <include name="logintest" invocation-numbers="0 1 2"/>
+          <include name="teardown"/>
+          <include name="logoverification"/>
+          <include name="browser_launch"/>
+          <include name="loginButtonTest"/>
+        </methods>
+      </class> <!-- Testpkg.Login_test -->
       <class name="Testpkg.Checkout_test">
         <methods>
           <include name="iconclick"/>
@@ -10,6 +19,15 @@
           <include name="browser_launch"/>
         </methods>
       </class> <!-- Testpkg.Checkout_test -->
+      <class name="Testpkg.Product_test">
+        <methods>
+          <include name="logoValidationTest"/>
+          <include name="addItemToCartAndDisplayProductsTest"/>
+          <include name="productDetailsReportTest"/>
+          <include name="teardown"/>
+          <include name="browser_launch"/>
+        </methods>
+      </class> <!-- Testpkg.Product_test -->
     </classes>
   </test> <!-- Regression Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

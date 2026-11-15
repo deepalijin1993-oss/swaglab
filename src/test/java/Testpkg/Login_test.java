@@ -11,98 +11,82 @@ import Pagepkg.Login_page;
 import Utilitiespkg.ExcelUtil;
 
 public class Login_test extends Base_class {
-    
+
     Login_page log;
 
     // DATA PROVIDER FOR LOGIN
-   
     @DataProvider(name = "loginData")
     public Object[][] getData() throws Exception {
-        
         String path = "C:\\Users\\hp\\Desktop\\Selenium Automation\\data.xlsx";
         return ExcelUtil.getTestData(path, "Sheet1");
     }
 
-   
     // 1. LOGIN TEST (Using DataProvider)
-  
     @Test(dataProvider = "loginData", priority = 1)
-    public void logintest(String username, String password) 
-            throws InterruptedException, IOException {
-        
+    public void logintest(String username, String password) throws InterruptedException, IOException {
         driver.get("https://www.saucedemo.com/");
-        
-        test = extent.createTest("Login Test - " + username);
-        
+
+        Reporter_class.test = Reporter_class.extent.createTest("Login Test - " + username);
         log = new Login_page(driver);
-        
-        
+
         log.setvalue(username, password);
         log.login_button();
-        
+
         System.out.println("Executed for: " + username);
-        
         String currentUrl = driver.getCurrentUrl();
-        
+
+        boolean loginCheck = currentUrl.contains("inventory.html");
+
         // LOGIN SUCCESS CONDITION
-        if (currentUrl.equals("https://www.saucedemo.com/inventory.html")) {
-            test.pass("Login successful for: " + username);
+        if (loginCheck) {
+            Reporter_class.test.pass("Login successful for: " + username);
         } 
         // LOGIN FAILURE CONDITION (Screenshot & Extent Report)
         else {
-        	String screenshotName = "LoginFailed_" + username;
+            String screenshotName = "LoginFailed_" + username;
             Reporter_class.screenshotmethodString(driver, screenshotName);
-            
-            
-            String fullPath = System.getProperty("user.dir") + "\\screenshot\\" + screenshotName + ".png";
-            test.addScreenCaptureFromPath(fullPath);
-            
-            test.fail("Login failed for: " + username);
-        }}
-//            String screenshotName = "LoginFailed_" + username;
-//            Reporter_class.screenshotmethodString(driver, screenshotName);
-//            test.addScreenCaptureFromPath(
-//                "screenshot\\" + screenshotName + ".png"
-//            );
-//            test.fail("Login failed for: " + username);
-////            Assert.fail("Login failed for: " + username);
-//        }
-//    }
 
-    // 2. LOGO VERIFICATION TEST
-  
+            String fullPath = System.getProperty("user.dir") + "\\screenshot\\" + screenshotName + ".png";
+            Reporter_class.test.addScreenCaptureFromPath(fullPath);
+            Reporter_class.test.fail("Login failed for: " + username);
+        }
+    }
+
+ // 2. LOGO VERIFICATION TEST
     @Test(priority = 2)
     public void logoverification() throws IOException {
         driver.get("https://www.saucedemo.com/");
         
-        test = extent.createTest("Logo Validation Test");
+        Reporter_class.test = Reporter_class.extent.createTest("Logo Validation Test");
         
         log = new Login_page(driver);
-        WebElement logoElement = log.logoverification();
+        boolean isLogoPresent = log.logoverification();
         
-        if (logoElement.isDisplayed()) {
-            test.pass("Logo verification passed successfully");
+        if (isLogoPresent) {
+            Reporter_class.test.pass("Logo verification passed successfully");
         } else {
-            test.fail("Logo verification failed");
+            String screenshotName = "logo_failed";
+            String fullPath = System.getProperty("user.dir") + "\\screenshot\\" + screenshotName + ".png";
+            Reporter_class.screenshotmethodString(driver, screenshotName);
+            Reporter_class.test.addScreenCaptureFromPath(fullPath);
+            Reporter_class.test.fail("Logo verification failed");
             Assert.fail("Logo verification failed");
         }
     }
-
     // 3. LOGIN BUTTON TEXT / DISPLAY TEST
-   
     @Test(priority = 3)
     public void loginButtonTest() throws IOException {
         driver.get("https://www.saucedemo.com/");
-        
-        test = extent.createTest("Login Button Validation Test");
-        
+
+        Reporter_class.test = Reporter_class.extent.createTest("Login Button Validation Test");
+
         log = new Login_page(driver);
         WebElement btn = log.buttontext();
-        
+
         if (btn.isDisplayed()) {
-            test.pass("Login button is displayed properly. Text: " + btn.getText());
+            Reporter_class.test.pass("Login button is displayed properly. Text: " + btn.getText());
         } else {
-            test.fail("Login button is not displayed");
+            Reporter_class.test.fail("Login button is not displayed");
             Assert.fail("Login button is not displayed");
         }
     }

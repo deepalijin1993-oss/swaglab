@@ -32,8 +32,8 @@ public class Login_page {
 	    }
 
 	    // Logo verification method
-	    public WebElement logoverification() {
-	        return logo;
+	    public boolean logoverification() {
+	        return logo.isDisplayed();
 	    }
 
 	    // To return Login button text or element

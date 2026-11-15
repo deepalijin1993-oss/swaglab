@@ -49,7 +49,7 @@ public class Product_page {
         System.out.println("Total Add to Cart Buttons: " + totalProducts);
         
         for (int i = 0; i < totalProducts; i++) {
-            WebElement item = cartbutton.get(0);
+            WebElement item = cartbutton.get(i);
             item.click();
         }
         System.out.println("Successfully added all products to the cart");
